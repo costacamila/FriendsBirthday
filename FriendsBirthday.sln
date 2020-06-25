@@ -9,7 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendsBirthday.Model", "Fr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendsBirthday.Repository", "FriendsBirthday.Repository\FriendsBirthday.Repository.csproj", "{6B7BCE0B-F3AC-41AF-824A-60CEB5FF215C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendsBirthday.Calculator", "FriendsBirthday.Calculator\FriendsBirthday.Calculator.csproj", "{1DBD9EE0-5AD4-4E0F-B1EB-C98AAF67FDBB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FriendsBirthday.Calculator", "FriendsBirthday.Calculator\FriendsBirthday.Calculator.csproj", "{1DBD9EE0-5AD4-4E0F-B1EB-C98AAF67FDBB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FriendsBirthday.Test", "FriendsBirthday.Test\FriendsBirthday.Test.csproj", "{61BA69D5-08A5-424C-9F5F-032CE61DCAA9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{1DBD9EE0-5AD4-4E0F-B1EB-C98AAF67FDBB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1DBD9EE0-5AD4-4E0F-B1EB-C98AAF67FDBB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1DBD9EE0-5AD4-4E0F-B1EB-C98AAF67FDBB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{61BA69D5-08A5-424C-9F5F-032CE61DCAA9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{61BA69D5-08A5-424C-9F5F-032CE61DCAA9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{61BA69D5-08A5-424C-9F5F-032CE61DCAA9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{61BA69D5-08A5-424C-9F5F-032CE61DCAA9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
