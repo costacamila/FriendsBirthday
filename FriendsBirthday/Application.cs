@@ -3,6 +3,7 @@ using System.Linq;
 using FriendsBirthday.Model;
 using FriendsBirthday.Repository;
 using FriendsBirthday.Calculator;
+using System.Threading;
 
 namespace FriendsBirthday
 {
@@ -19,7 +20,7 @@ namespace FriendsBirthday
                 {
                     Console.WriteLine($"Name: {n.Name} {n.Surname}");
                 }
-                Console.WriteLine();
+                Console.WriteLine("");
             }
             Console.WriteLine("Which birthday action do you wanna make?");
             Console.WriteLine("1 - Search");
@@ -51,20 +52,20 @@ namespace FriendsBirthday
                     break;
                 case '5':
                     Archive.ReadFile();
-                    Console.WriteLine("Exit.");
+                    Console.WriteLine("\nExit.");
                     Archive.CloseTextFile();
                     break;
                 default:
                     Clean();
                     Header();
-                    Console.WriteLine("Invalid option.\n");
+                    Console.WriteLine("\nInvalid option.\n");
                     Start();
                     break;
             }
 
             static void Header()
             {
-                Console.WriteLine("* Friend's Birthday *\n");
+                Console.WriteLine("\n* Friends' Birthday *\n");
             }
 
             static void Clean()
@@ -77,8 +78,9 @@ namespace FriendsBirthday
                 Clean();
                 Header();
                 Console.WriteLine("Which friend do you wanna search?");
-                Console.Write("Name: ");
+                Console.Write("\nName: ");
                 string name = Console.ReadLine();
+                Console.WriteLine("");
                 if (repository.Search(name).Count() > 0)
                 {
                     var searchedFriends = repository.Search(name);
@@ -88,25 +90,32 @@ namespace FriendsBirthday
                         Console.WriteLine($"{i} - Name: {n.Name} {n.Surname}");
                         i++;
                     }
-                    Console.Write("Choose the friend you wanna see: ");
+                    Console.Write("\nChoose the friend you wanna see: ");
                     int id = Int32.Parse(Console.ReadLine());
                     if (id < searchedFriends.Count)
                     {
                         var f = searchedFriends[id];
-                        Console.WriteLine($"Friend Data:\nName: {f.Name}\nSurname: {f.Surname}\nBirthday: {f.Birthday.ToShortDateString()}\n");
-                        Console.WriteLine(RemainingDays.Calculate(f) + " remaining days to next birthday.");
-                        Console.WriteLine("Press any key to return...");
+                        Console.WriteLine($"\n<Searched friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
+                        Console.WriteLine(RemainingDays.Calculate(f) + " remaining days to next birthday.\n");
+                        Console.WriteLine("\nPress any key to return...");
                         Console.ReadKey();
                         Clean();
                         Header();
                         Start();
+                    }
+                    else
+                    {
+                        Clean();
+                        Header();
+                        Console.WriteLine("\nInvalid id.\n");
+                        Search();
                     }
                 }
                 else
                 {
                     Clean();
                     Header();
-                    Console.WriteLine("Invalid id.");
+                    Console.WriteLine("There is no result to this search.\n");
                     Start();
                 }
             }
@@ -115,22 +124,17 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Who do you wanna insert?");
-
+                Console.WriteLine("Who do you wanna insert?\n");
                 Console.Write("Name: ");
                 string name = Console.ReadLine().Trim();
-
                 Console.Write("Surname: ");
                 string surname = Console.ReadLine().Trim();
-
                 Console.Write("Birthday (dd/MM/yyyy): ");
                 var birthday = DateTime.Parse(Console.ReadLine());
-
                 var newFriend = new Friend(name, surname, birthday);
-                var message = repository.Save(newFriend);
-                Console.WriteLine(message);
-
-                Console.WriteLine("Press any key to return...");
+                Console.WriteLine("");
+                Console.WriteLine(repository.Save(newFriend));
+                Console.WriteLine("\nPress any key to return...");
                 Console.ReadKey();
                 Clean();
                 Header();
@@ -141,28 +145,29 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Which friend do you wanna edit?");
+                Console.WriteLine("Which friend do you wanna edit?\n");
                 int i = 0;
                 foreach (var n in RepositoryDb.friends)
                 {
                     Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
                     i++;
                 }
-                Console.Write("Choose the friend you wanna edit: ");
+                Console.Write("\nChoose the friend you wanna edit: ");
                 int id = Int32.Parse(Console.ReadLine());
                 if (id < RepositoryDb.friends.Count)
                 {
                     var f = RepositoryDb.friends[id];
-                    Console.WriteLine($"Edit:\n{f.Name}\n{f.Surname}\n{f.Birthday.ToShortDateString()}\n");
-                    Console.WriteLine("Type the new data.");
+                    Console.WriteLine($"\n<Edited friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
+                    Console.WriteLine("\nType the new data.\n");
                     Console.Write("Name: ");
                     string name = Console.ReadLine();
                     Console.Write("Surname: ");
                     string surname = Console.ReadLine();
                     Console.Write("Birthday (dd/MM/yyyy): ");
                     var birthday = DateTime.Parse(Console.ReadLine());
+                    Console.WriteLine("");
                     Console.WriteLine(repository.Edit(id, name, surname, birthday));
-                    Console.WriteLine("Press any key to return...");
+                    Console.WriteLine("\nPress any key to return...");
                     Console.ReadKey();
                     Clean();
                     Header();
@@ -172,7 +177,7 @@ namespace FriendsBirthday
                 {
                     Clean();
                     Header();
-                    Console.WriteLine("Invalid id.");
+                    Console.WriteLine("\nInvalid id.\n");
                     Edit();
                 }
             }
@@ -181,21 +186,21 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Which friend do you wanna delete?");
+                Console.WriteLine("Which friend do you wanna delete?\n");
                 int i = 0;
                 foreach (var n in RepositoryDb.friends)
                 {
                     Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
                     i++;
                 }
-                Console.Write("Choose the friend you wanna delete: ");
+                Console.Write("\nChoose the friend you wanna delete: ");
                 int id = Int32.Parse(Console.ReadLine());
                 if (id < RepositoryDb.friends.Count)
                 {
                     var f = RepositoryDb.friends[id];
-                    Console.WriteLine($"Delete:\n{f.Name}\n{f.Surname}\n{f.Birthday.ToShortDateString()}\n");
+                    Console.WriteLine($"\n<Deleted friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
                     Console.WriteLine(repository.Delete(id));
-                    Console.WriteLine("Press any key to return...");
+                    Console.WriteLine("\nPress any key to return...");
                     Console.ReadKey();
                     Clean();
                     Header();
@@ -205,7 +210,7 @@ namespace FriendsBirthday
                 {
                     Clean();
                     Header();
-                    Console.WriteLine("Invalid id.");
+                    Console.WriteLine("\nInvalid id.\n");
                     Delete();
                 }
             }

@@ -7,7 +7,7 @@ namespace FriendsBirthday
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("* Friend's Birthday *\n");
+            Console.WriteLine("\n* Friends' Birthday *\n");
             Archive.ReadFile();
             Application.Start();
         }
