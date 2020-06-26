@@ -12,7 +12,6 @@ namespace FriendsBirthday
         public static void Start()
         {
             var repository = new RepositoryDb();
-
             if (Today.Calculate().Count > 0)
             {
                 Console.WriteLine("Today's birthdays:");
@@ -29,7 +28,6 @@ namespace FriendsBirthday
             Console.WriteLine("4 - Delete");
             Console.WriteLine("5 - Exit");
             Console.Write("\nAction: ");
-
             Archive.CloseTextFile();
             char operacao = Console.ReadLine().Trim().ToCharArray()[0];
             switch (operacao)
@@ -77,45 +75,57 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Which friend do you wanna search?");
-                Console.Write("\nName: ");
-                string name = Console.ReadLine();
-                Console.WriteLine("");
-                if (repository.Search(name).Count() > 0)
+                if (RepositoryDb.friends.Count > 0)
                 {
-                    var searchedFriends = repository.Search(name);
-                    int i = 0;
-                    foreach (var n in searchedFriends)
+                    Console.WriteLine("Which friend do you wanna search?");
+                    Console.Write("\nName: ");
+                    string name = Console.ReadLine();
+                    Console.WriteLine("");
+                    if (repository.Search(name).Count() > 0)
                     {
-                        Console.WriteLine($"{i} - Name: {n.Name} {n.Surname}");
-                        i++;
-                    }
-                    Console.Write("\nChoose the friend you wanna see: ");
-                    int id = Int32.Parse(Console.ReadLine());
-                    if (id < searchedFriends.Count)
-                    {
-                        var f = searchedFriends[id];
-                        Console.WriteLine($"\n<Searched friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
-                        Console.WriteLine(RemainingDays.Calculate(f) + " remaining days to next birthday.\n");
-                        Console.WriteLine("\nPress any key to return...");
-                        Console.ReadKey();
-                        Clean();
-                        Header();
-                        Start();
+                        var searchedFriends = repository.Search(name);
+                        int i = 0;
+                        foreach (var n in searchedFriends)
+                        {
+                            Console.WriteLine($"{i} - Name: {n.Name} {n.Surname}");
+                            i++;
+                        }
+                        Console.Write("\nChoose the friend you wanna see: ");
+                        int id = Int32.Parse(Console.ReadLine());
+                        if (id < searchedFriends.Count)
+                        {
+                            var f = searchedFriends[id];
+                            Console.WriteLine($"\n<Searched friend>\nName: {f.Name} {f.Surname}\nBirthday: {f.Birthday.ToShortDateString()}");
+                            Console.WriteLine(RemainingDays.Calculate(f) + " remaining days to next birthday.");
+                            Console.WriteLine("\nPress any key to return...");
+                            Console.ReadKey();
+                            Clean();
+                            Header();
+                            Start();
+                        }
+                        else
+                        {
+                            Clean();
+                            Header();
+                            Console.WriteLine("\nInvalid id.\n");
+                            Search();
+                        }
                     }
                     else
                     {
                         Clean();
                         Header();
-                        Console.WriteLine("\nInvalid id.\n");
-                        Search();
+                        Console.WriteLine("There is no result to this search.\n");
+                        Start();
                     }
                 }
                 else
                 {
+                    Console.WriteLine("At least one friend is required to search.");
+                    Console.WriteLine("\nPress any key to return...");
+                    Console.ReadKey();
                     Clean();
                     Header();
-                    Console.WriteLine("There is no result to this search.\n");
                     Start();
                 }
             }
@@ -145,40 +155,52 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Which friend do you wanna edit?\n");
-                int i = 0;
-                foreach (var n in RepositoryDb.friends)
+                if (RepositoryDb.friends.Count > 0)
                 {
-                    Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
-                    i++;
+                    Console.WriteLine("Which friend do you wanna edit?\n");
+                    int i = 0;
+                    foreach (var n in RepositoryDb.friends)
+                    {
+                        Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
+                        i++;
+                    }
+                    Console.Write("\nChoose the friend you wanna edit: ");
+                    int id = Int32.Parse(Console.ReadLine());
+                    if (id < RepositoryDb.friends.Count)
+                    {
+                        var f = RepositoryDb.friends[id];
+                        Console.WriteLine($"\n<Edited friend>\nName: {f.Name} {f.Surname}\nBirthday: {f.Birthday.ToShortDateString()}");
+                        Console.WriteLine("\nType the new data.\n");
+                        Console.Write("Name: ");
+                        string name = Console.ReadLine();
+                        Console.Write("Surname: ");
+                        string surname = Console.ReadLine();
+                        Console.Write("Birthday (dd/MM/yyyy): ");
+                        var birthday = DateTime.Parse(Console.ReadLine());
+                        Console.WriteLine("");
+                        Console.WriteLine(repository.Edit(id, name, surname, birthday));
+                        Console.WriteLine("\nPress any key to return...");
+                        Console.ReadKey();
+                        Clean();
+                        Header();
+                        Start();
+                    }
+                    else
+                    {
+                        Clean();
+                        Header();
+                        Console.WriteLine("\nInvalid id.\n");
+                        Edit();
+                    }
                 }
-                Console.Write("\nChoose the friend you wanna edit: ");
-                int id = Int32.Parse(Console.ReadLine());
-                if (id < RepositoryDb.friends.Count)
+                else
                 {
-                    var f = RepositoryDb.friends[id];
-                    Console.WriteLine($"\n<Edited friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
-                    Console.WriteLine("\nType the new data.\n");
-                    Console.Write("Name: ");
-                    string name = Console.ReadLine();
-                    Console.Write("Surname: ");
-                    string surname = Console.ReadLine();
-                    Console.Write("Birthday (dd/MM/yyyy): ");
-                    var birthday = DateTime.Parse(Console.ReadLine());
-                    Console.WriteLine("");
-                    Console.WriteLine(repository.Edit(id, name, surname, birthday));
+                    Console.WriteLine("At least one friend is required to edit.");
                     Console.WriteLine("\nPress any key to return...");
                     Console.ReadKey();
                     Clean();
                     Header();
                     Start();
-                }
-                else
-                {
-                    Clean();
-                    Header();
-                    Console.WriteLine("\nInvalid id.\n");
-                    Edit();
                 }
             }
 
@@ -186,32 +208,45 @@ namespace FriendsBirthday
             {
                 Clean();
                 Header();
-                Console.WriteLine("Which friend do you wanna delete?\n");
-                int i = 0;
-                foreach (var n in RepositoryDb.friends)
+                if (RepositoryDb.friends.Count > 0)
                 {
-                    Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
-                    i++;
+                    Console.WriteLine("Which friend do you wanna delete?\n");
+                    int i = 0;
+                    foreach (var n in RepositoryDb.friends)
+                    {
+                        Console.WriteLine($"{i} - Name: {n.Name} {n.Surname} | Birthday: {n.Birthday.ToShortDateString()}");
+                        i++;
+                    }
+                    Console.Write("\nChoose the friend you wanna delete: ");
+                    int id = Int32.Parse(Console.ReadLine());
+                    if (id < RepositoryDb.friends.Count)
+                    {
+                        var f = RepositoryDb.friends[id];
+                        Console.WriteLine($"\n<Deleted friend>\nName: {f.Name} {f.Surname}\nBirthday: {f.Birthday.ToShortDateString()}");
+                        Console.WriteLine("");
+                        Console.WriteLine(repository.Delete(id));
+                        Console.WriteLine("\nPress any key to return...");
+                        Console.ReadKey();
+                        Clean();
+                        Header();
+                        Start();
+                    }
+                    else
+                    {
+                        Clean();
+                        Header();
+                        Console.WriteLine("\nInvalid id.\n");
+                        Delete();
+                    }
                 }
-                Console.Write("\nChoose the friend you wanna delete: ");
-                int id = Int32.Parse(Console.ReadLine());
-                if (id < RepositoryDb.friends.Count)
+                else
                 {
-                    var f = RepositoryDb.friends[id];
-                    Console.WriteLine($"\n<Deleted friend>\nName: {f.Name} {f.Surname} | Birthday: {f.Birthday.ToShortDateString()}");
-                    Console.WriteLine(repository.Delete(id));
+                    Console.WriteLine("At least one friend is required to delete.");
                     Console.WriteLine("\nPress any key to return...");
                     Console.ReadKey();
                     Clean();
                     Header();
                     Start();
-                }
-                else
-                {
-                    Clean();
-                    Header();
-                    Console.WriteLine("\nInvalid id.\n");
-                    Delete();
                 }
             }
         }

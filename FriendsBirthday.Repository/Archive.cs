@@ -11,14 +11,22 @@ namespace FriendsBirthday.Repository
             return Environment.GetFolderPath(Environment.SpecialFolder.Desktop) + @"\FriendsBirthday.txt";
         }
 
-        public static void ReadFile()
+        public static bool ReadFile()
         {
             string fileName = GetFileName();
             FileStream file;
             if (!File.Exists(fileName))
             {
-                file = File.Create(fileName);
-                file.Close();
+                try
+                {
+                    file = File.Create(fileName);
+                    file.Close();
+                    return true;
+                }
+                catch (Exception)
+                {
+                    return false;
+                }
             }
             string result = File.ReadAllText(fileName);
             string[] friends = result.Split(';');
@@ -31,10 +39,12 @@ namespace FriendsBirthday.Repository
                 Friend friend = new Friend(name, surname, birthday);
                 RepositoryDb.friends.Add(friend);
             }
+            return true;
         }
 
-        public static void CloseTextFile()
+        public static bool CloseTextFile()
         {
+            bool result = false;
             if (File.Exists(GetFileName()))
             {
                 var input = String.Empty;
@@ -44,8 +54,10 @@ namespace FriendsBirthday.Repository
                 }
                 File.WriteAllText(GetFileName(), String.Empty);
                 File.WriteAllText(GetFileName(), input);
+                result = true;
             }
             RepositoryDb.friends.Clear();
+            return result;
         }
     }
 }

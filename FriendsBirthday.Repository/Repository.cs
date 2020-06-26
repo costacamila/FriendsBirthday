@@ -26,10 +26,14 @@ namespace FriendsBirthday.Repository
 
         public string Edit(int id, string name, string surname, DateTime birthday)
         {
-            friends[id].Name = name;
-            friends[id].Surname = surname;
-            friends[id].Birthday = birthday;
-            return "Friend successfully edited!";
+            if (!Check(new Friend(name, surname, birthday)).Any())
+            {
+                friends[id].Name = name;
+                friends[id].Surname = surname;
+                friends[id].Birthday = birthday;
+                return "Friend successfully edited!";
+            }
+            return "This friend already exists.";
         }
 
         public string Delete(int id)

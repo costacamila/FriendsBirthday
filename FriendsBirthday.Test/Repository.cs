@@ -15,7 +15,6 @@ namespace FriendsBirthday.Test
         {
             var friend = new Friend("Name", "Surname", new DateTime(2020, 6, 25));
             Assert.Contains("successfully", saveFriend());
-
             string saveFriend()
             {
                 if (!Check(friend).Any())
@@ -33,7 +32,6 @@ namespace FriendsBirthday.Test
             var friend = new Friend("Name", "Surname", new DateTime(2020, 6, 25));
             friends.Add(friend);
             Assert.NotNull(SearchFriend(friend.Name));
-
             List<Friend> SearchFriend(string name)
             {
                 return friends.Where(f => f.fullName().Contains(name, StringComparison.InvariantCultureIgnoreCase)).ToList();
@@ -45,9 +43,7 @@ namespace FriendsBirthday.Test
         {
             var friend = new Friend("Name", "Surname", new DateTime(2020, 6, 25));
             friends.Add(friend);
-            
             Assert.Contains("successfully", EditFriend(0,"NewName","NewSurname",new DateTime(2020,6,26)));
-
             string EditFriend(int id, string name, string surname, DateTime birthday)
             {
                 friends[id].Name = name;
